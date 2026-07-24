@@ -796,6 +796,10 @@ def move_model_to_subfolder(filepath, model_info):
 
     content = civitai_get(f'{URLS["modelId"]}{model_id}')
 
+if content is None:
+    print("Parent model no longer exists.")
+    return filepath
+    
     tags = content["tags"]
 
     # iterate through tags until we find one that matches MODEL_CATEGORIES
