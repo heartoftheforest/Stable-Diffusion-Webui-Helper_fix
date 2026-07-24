@@ -166,7 +166,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
     for filepath, model_type in models:
         success = None
 
-        tracker = (count[0], total)
+        tracker = (models_scanned, total)
 
         progress(
             tracker,
@@ -174,7 +174,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
             unit="models"
         )
 
-        count[0] = count[0] + 1
+        models_scanned += 1
 
         for result in scan_single_model(filepath, model_type, refetch_old, organize_models, delay):
             if isinstance(result, str):
@@ -194,7 +194,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
             continue
 
         # set model_count
-        count[1] = count[1] + 1
+        models_found += 1
 
         # check preview image
         for _ in civitai.get_preview_image_by_model_path(
@@ -205,7 +205,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
             pass
 
     # this previously had an image count, but it always matched the model count.
-    output = f"Done. Successfully scanned {count[1]} of {len(models)} models."
+    output = f"Done. Successfully scanned {models_found} of {len(models)} models."
 
     util.printD(output)
 
