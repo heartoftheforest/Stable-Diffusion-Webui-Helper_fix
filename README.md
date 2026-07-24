@@ -1,5 +1,4 @@
-
-<img src="https://visitor-badge.laobi.icu/badge?page_id=suzukimain.Stable-Diffusion-Webui-Civitai-Helper" alt="Visitor Badge">
+## WIP fix for the error where it cannot find the model on the website.
 
 
 ## About Webui Helper
