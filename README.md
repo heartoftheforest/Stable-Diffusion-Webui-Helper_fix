@@ -1,5 +1,11 @@
-## WIP fix for the error where it cannot find the model on the website.
-As of 07/24/2026 I've updated the code by a smidge so that if the console/web UI encounters that it cannot find the link on Civitai, it ends the entire search. Now it'll skip the links that don't result in pulling the image/data, and print the URL of the model it couldn't find. Updates to make the process print a list at the end so it's easier to see outside of the text wall of stuff python is doing while scanning.
+### WIP fix for the error where it cannot find the model on the website.
+As of 07/24/2026 the extension now reports:
+- Models not found on Civitai
+- Continues scanning, no error that stops the scan completely
+- Prints in the console an alphabetical list of models
+	- Prints the list separated by checkpoint, lora, etc.
+    - Prints "models scanned" and "models found" in the console
+- Prints the list of models not found to a txt file in the extension folder named "missing_models.txt"
 
 ## About Webui Helper
 This extension provides the ability to download models and model metadata from Civitai. Data such as activation keywords, model description, version information, and model previews for models hosted on Civitai can be at your fingertips without having to navigate away from stable diffusion webui.
