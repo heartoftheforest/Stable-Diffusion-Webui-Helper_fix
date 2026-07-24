@@ -98,7 +98,7 @@ def scan_single_model(filepath, model_type, refetch_old, organize_models, delay)
 
         if not model_info:
             model_info = dummy_model_info(filepath, civitai_hash, model_type)
-            yield True
+            yield ("missing", filepath)
 
         # if model is lora and not already in a subfolder, move into subfolder based on its type (character,
         # clothing, etc.)
@@ -139,7 +139,6 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
 
     model_types = scan_model_types
     if isinstance(scan_model_types, str):
-        # check if type is a string
         model_types = [scan_model_types]
 
     models = []
@@ -182,6 +181,11 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
                 continue
 
             if isinstance(result, tuple):
+            
+                if result[0] == "missing":
+                    missing_models.append((model_type, result[1]))
+                    continue
+            
                 percent, status = result
                 progress(percent, desc=status)
                 continue
@@ -217,7 +221,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
         missing_models.sort()
         
         for model_path in missing_models:
-            util.printD(f" - {os.path.basename(model_path)}")
+            util.printD(f"[{model_type}] {os.path.basename(model_path)}")
 
         util.printD("=" * 60)
 
@@ -227,7 +231,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
         )
         with open(report_path, "w", encoding="utf-8") as report:
             for model_path in missing_models:
-                report.write(f"{os.path.basename(model_path)}\n")
+                report.write(f"[{model_type}] {os.path.basename(model_path)}\n")
     
         util.printD(f"Saved missing model list to: {report_path}")
 
