@@ -159,7 +159,9 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
 
                 models.append((filepath, model_type))
 
-    count = [0, 0]
+    models_scanned = 0
+    models_found = 0
+    missing_models = []
     total = len(models)
     for filepath, model_type in models:
         success = None
@@ -188,6 +190,7 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
             break
 
         if not success:
+            missing_models.append((model_type, filepath))
             continue
 
         # set model_count
@@ -205,6 +208,28 @@ def scan_model(scan_model_types, refetch_old, organize_models=False, progress=gr
     output = f"Done. Successfully scanned {count[1]} of {len(models)} models."
 
     util.printD(output)
+
+    if missing_models:
+        util.printD("")
+        util.printD("=" * 60)
+        util.printD(f"Models not found on Civitai ({len(missing_models)}):")
+
+        missing_models.sort()
+        
+        for model_path in missing_models:
+            util.printD(f" - {os.path.basename(model_path)}")
+
+        util.printD("=" * 60)
+
+        report_path = os.path.join(
+            os.path.dirname(__file__),
+            "missing_models.txt"
+        )
+        with open(report_path, "w", encoding="utf-8") as report:
+            for model_path in missing_models:
+                report.write(f"{os.path.basename(model_path)}\n")
+    
+        util.printD(f"Saved missing model list to: {report_path}")
 
     yield output
 
